@@ -1,1 +1,5 @@
 
+docker commit 09784601a84b arunwebserver:v3
+docker tag arunwebserver:v3 gangassault343/arunwebserver:v3
+docker login -u gangassault343
+docker push gangassault343/arunwebserver:v3
