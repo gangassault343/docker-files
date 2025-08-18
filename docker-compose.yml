@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  web:
+    image: gangassault343/arunwebserver
+    container_name: arun-phpweb
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: gangassault343/arunmysql
+    container_name: arun-mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: phpcrud
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: gangassault343/arunphpmyadmin
+    container_name: arun-phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: secret
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+
