@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   web:
-    image: gangassault343/arunwebserver
+    image: gangassault343/arunwebserver:v2
     container_name: arun-phpweb
     ports:
       - "80:80"
