@@ -1,0 +1,3 @@
+docker cp ./src.zip arun-phpweb:/var/www/html
+
+scp -i xxx.pem file.zip ec2-user@ipaddre:/var/www/html
