@@ -4,6 +4,7 @@ sudo systemctl enable --now httpd
 sudo dnf module enable php:8.2 -y
 sudo dnf install -y php php-mysqlnd
 sudo systemctl restart httpd
+sudo systemctl stop httpd
 echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
 Visit -> http://<your-ec2-public-ip>/info.php
 Install Docker
