@@ -1,0 +1,18 @@
+sudo dnf update -y
+sudo dnf install -y httpd
+sudo systemctl enable --now httpd
+sudo dnf module enable php:8.2 -y
+sudo dnf install -y php php-mysqlnd
+sudo systemctl restart httpd
+echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
+Visit -> http://<your-ec2-public-ip>/info.php
+Install Docker
+sudo dnf install -y docker
+sudo systemctl enable --now docker
+sudo usermod -aG docker ec2-user
+docker run hello-world
+Install Docker Compose v2 plugin
+mkdir -p ~/.docker/cli-plugins
+curl -SL https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+chmod +x ~/.docker/cli-plugins/docker-compose
+docker compose version
