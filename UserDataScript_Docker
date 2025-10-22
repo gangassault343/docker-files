@@ -1,0 +1,69 @@
+#!/bin/bash
+# Update the package list and install dependencies
+yum update -y
+yum install -y yum-utils git
+
+# Add Docker repo and install Docker
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install -y docker-ce docker-ce-cli containerd.io
+
+# Start and enable Docker
+systemctl start docker
+systemctl enable docker
+
+# Add ec2-user to the docker group (optional, avoids using sudo for Docker)
+usermod -aG docker ec2-user
+
+# Install Docker Compose (latest v2.x release)
+DOCKER_COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
+curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+# Optional: Create a sample Docker Compose project
+mkdir /home/ec2-user/myapp
+cat <<EOF > /home/ec2-user/docker-compose.yml
+services:
+  web:
+    image: gangassault343/arunwebserver:v7
+    container_name: arun-phpweb
+    ports:
+      - "80:80"    
+    depends_on:
+      - db
+
+  db:
+    image: gangassault343/arunmysql
+    container_name: arun-mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: phpcrud
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: gangassault343/arunphpmyadmin
+    container_name: arun-phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: secret
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+
+EOF
+
+# Change ownership so ec2-user can access it
+chown -R ec2-user:ec2-user /home/ec2-user/
+
+# Start the compose project
+cd /home/ec2-user
+docker-compose up -d
