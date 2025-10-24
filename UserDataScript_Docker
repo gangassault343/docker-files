@@ -20,7 +20,7 @@ curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VE
 chmod +x /usr/local/bin/docker-compose
 
 # Optional: Create a sample Docker Compose project
-mkdir /home/ec2-user/myapp
+mkdir /home/ec2-user
 cat <<EOF > /home/ec2-user/docker-compose.yml
 services:
   web:
@@ -61,9 +61,4 @@ volumes:
 
 EOF
 
-# Change ownership so ec2-user can access it
-chown -R ec2-user:ec2-user /home/ec2-user/
 
-# Start the compose project
-cd /home/ec2-user
-docker-compose up -d
