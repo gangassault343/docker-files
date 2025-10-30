@@ -1,27 +1,27 @@
 #!/bin/bash
 # Update the package list and install dependencies
-yum update -y
-yum install -y yum-utils git
+sudo yum update -y
+sudo yum install -y yum-utils git
 
 # Add Docker repo and install Docker
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum install -y docker-ce docker-ce-cli containerd.io
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install -y docker-ce docker-ce-cli containerd.io
 
 # Start and enable Docker
-systemctl start docker
-systemctl enable docker
+sudo systemctl start docker
+sudo systemctl enable docker
 
 # Add ec2-user to the docker group (optional, avoids using sudo for Docker)
-usermod -aG docker ec2-user
+sudo usermod -aG docker ec2-user
 
 # Install Docker Compose (latest v2.x release)
-DOCKER_COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
-curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+sudo DOCKER_COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
+sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
 # Optional: Create a sample Docker Compose project
-mkdir /home/ec2-user
-cat <<EOF > /home/ec2-user/docker-compose.yml
+sudo mkdir /home/ec2-user
+sudo cat <<EOF > /home/ec2-user/docker-compose.yml
 services:
   web:
     image: gangassault343/arunwebserver:v7
