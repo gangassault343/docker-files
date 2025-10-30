@@ -24,7 +24,7 @@ sudo mkdir /home/ec2-user
 sudo cat <<EOF > /home/ec2-user/docker-compose.yml
 services:
   web:
-    image: gangassault343/arunwebserver:v7
+    image: gangassault343/arunwebserver:v12
     container_name: arun-phpweb
     ports:
       - "80:80"    
@@ -32,7 +32,7 @@ services:
       - db
 
   db:
-    image: gangassault343/arunmysql
+    image: gangassault343/arunmysql:v2
     container_name: arun-mysql-db
     restart: always
     environment:
@@ -44,7 +44,7 @@ services:
       - db_data:/var/lib/mysql
 
   phpmyadmin:
-    image: gangassault343/arunphpmyadmin
+    image: gangassault343/arunphpmyadmin:v2
     container_name: arun-phpmyadmin
     restart: always
     ports:
